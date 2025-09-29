@@ -167,12 +167,14 @@
                  <formats>
                      <format>HTML</format>
                      <format>XML</format>
+                     <format>JSON</format>
                  </formats>
                  <outputDirectory>${project.build.directory}</outputDirectory>
                  <autoUpdate>false</autoUpdate>
                  <failOnError>false</failOnError>
              </configuration>
          </plugin>
+
         </plugins>
     </build>
 
