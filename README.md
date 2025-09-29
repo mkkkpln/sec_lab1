@@ -193,8 +193,7 @@ security:
 В случае, если JWT валиден, запрос пользователя пропускается далее, иначе возвращется ошибка 403.
 
 ### Скриншоты CI/CD
-<img width="1462" height="798" alt="image" src="https://github.com/user-attachments/assets/eaa352f1-d309-4baa-8a72-83919956e43b" />
 
 <img width="1462" height="563" alt="image" src="https://github.com/user-attachments/assets/579fecc0-cc93-4a44-a839-240607122582" />
-
+<img width="1462" height="798" alt="image" src="https://github.com/user-attachments/assets/eaa352f1-d309-4baa-8a72-83919956e43b" />
 
