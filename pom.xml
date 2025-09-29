@@ -127,6 +127,7 @@
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
+                    <xmlOutput>false</xmlOutput> <!-- чтобы html -->
                     <outputDirectory>${project.build.directory}/spotbugs</outputDirectory>
                 </configuration>
                 <executions>
@@ -146,7 +147,11 @@
                 <configuration>
                     <nvdApiKey>${dependency-check.nvd.api.key}</nvdApiKey>
                     <nvdApiDelay>6000</nvdApiDelay>
-                    <dataDirectory>${project.build.directory}/dependency-check-data</dataDirectory>
+                    <formats>
+                        <format>HTML</format>
+                        <format>XML</format>
+                    </formats>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
