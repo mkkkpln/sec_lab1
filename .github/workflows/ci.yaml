@@ -19,44 +19,28 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven   # кешируем зависимости для ускорения
 
-      - name: Build with Maven (skip tests for speed)
+      - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      # ---------- SAST (SpotBugs) ----------
-      - name: Run SpotBugs (generate XML)
+      # SpotBugs (SAST)
+      - name: Run SpotBugs
         run: mvn spotbugs:spotbugs
 
-      - name: Convert SpotBugs XML to HTML
-        run: |
-          sudo apt-get update && sudo apt-get install xsltproc -y
-          xsltproc ~/.m2/repository/com/github/spotbugs/spotbugs/4.9.4/spotbugs-4.9.4.xsl target/spotbugs.xml > target/spotbugs.html
-
-      - name: Upload SpotBugs HTML Report
+      - name: Upload SpotBugs report
         uses: actions/upload-artifact@v4
         with:
           name: spotbugs-report
           path: target/spotbugs.html
 
-      # ---------- SCA (Snyk / OWASP) ----------
-      - name: Set up Snyk
-        uses: snyk/actions/setup@master
-        with:
-          version: '1.1045.0'
-
-      - name: Run Snyk test
-        run: snyk test --all-projects --show-vulnerable-paths=all
+      # OWASP Dependency-Check (SCA)
+      - name: Run OWASP Dependency-Check
+        run: mvn org.owasp:dependency-check-maven:check -DnvdApiKey=${{ secrets.NVD_API_KEY }}
         env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
 
-      - name: Upload Snyk Report (JSON)
-        run: snyk test --json > snyk-report.json
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-      - name: Upload Snyk report
+      - name: Upload OWASP report
         uses: actions/upload-artifact@v4
         with:
-          name: snyk-report
-          path: snyk-report.json
+          name: dependency-check-report
+          path: target/dependency-check-report.html
