@@ -1,189 +1,111 @@
-## ЛР-1: Разработка защищенного REST API с интеграцией CI/CD
+# ЛР-1: Разработка защищенного REST API с интеграцией CI/CD
 
 ---
 
 ### Выполнила:
+- **Студентка:** Копалина Майя Алексеевна  
+- **Группа:** P3432  
+- **Язык программирования:** Java / Spring Boot  
 
-- Студентка: Копалина Майя Алексеевна
-- Группа: P3432
-- Язык программирования: Java/Spring Boot
+---
 
---- 
+## 📌 Описание проекта и API
 
-### Описание проекта и API
+В проекте реализована простая предметная область с двумя сущностями:
 
-Данный проект описывает простую предметную область, в которой участвуют две сущности:
+- **Пользователь (User)** — регистрируется в системе, может создавать посты.  
+- **Пост (Post)** — контент, создаваемый пользователем.  
 
-- Пользователь (User) - описывает пользователя, взаимодействующего с системой;
-- Пост (Post) - описывает контент, создаваемый пользователем.
+Связь: **один пользователь → много постов**.
 
 Данные сущности связаны отношение Один-ко-Многим:
 
 - У пользователя может быть 0 или более постов;
 - У поста должен быть один пользователь (т.н. автор).
 
-Для описания API используется язык спецификации OpenAPI:
 
-```openapi
-openapi: 3.0.0
+API описан с помощью спецификации **OpenAPI 3.0**.
 
-info:
-  title: 'Работа 1: Разработка защищенного REST API с интеграцией CI/CD'
-  version: 1.0.0
+---
 
-paths:
-  /auth/sign-up:
-    post:
-      summary: 'Запрос на регистрацию пользователя'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SignInRequest'
-      responses:
-        201:
-          description: 'Успешная регистрация пользователя'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/JwtAuthenticationResponse'
-        400:
-          description: 'Переданы невалидные данные'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionDto'
-  /api/users:
-    get:
-      summary: 'Запрос на получение всех пользователей'
-      security:
-        - BearerAuth: []
-      responses:
-        200:
-          description: 'Список всех пользователей'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserDto'
-  /api/posts:
-    get:
-      summary: 'Запрос на получение постов пользователя'
-      description: 'На запрос возврашается список постов пользователя, который отправил данный запрос'
-      security:
-        - BearerAuth: [ ]
-      responses:
-        200:
-          description: 'Список постов пользователя'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PostDto'
-    post:
-      summary: 'Запрос на создание поста от пользователя'
-      security:
-        - BearerAuth: [ ]
-      responses:
-        200:
-          description: 'Успешное создание поста'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PostDto'
-        400:
-          description: 'Переданы невалидные данные'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExceptionDto'
-components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: 'JWT для аутентификации'
-  schemas:
-    SignUpRequest:
-      description: 'Запрос на регистрацию пользователя'
-      type: object
-      required:
-        - email
-        - password
-        - nickname
-      properties:
-        email:
-          type: string
-          format: email
-          example: example@example.com
-        password:
-          type: string
-          minLength: 6
-          maxLength: 32
-          example: password
-        nickname:
-          type: string
-          minLength: 6
-          maxLength: 32
-          example: nickname
-    SignInRequest:
-      description: 'Запрос на вход пользователя'
-      type: object
-      required:
-        - email
-        - password
-      properties:
-        email:
-          type: string
-          format: email
-          example: example@example.com
-        password:
-          type: string
-          minLength: 6
-          maxLength: 32
-          example: password
-    JwtAuthenticationResponse:
-      description: 'Ответ, содержащий JWT'
-      type: object
-      required:
-        - jwt
-      properties:
-        jwt:
-          type: string
-    UserDto:
-      description: 'Пользователь'
-      type: object
-      required:
-        - email
-        - password
-      properties:
-        email:
-          type: string
-          format: email
-          example: example@example.com
-        password:
-          type: string
-          minLength: 6
-          maxLength: 32
-          example: password
-    PostDto:
-      description: 'Пост'
-      type: object
-      required:
-        - content
-      properties:
-        content:
-          type: string
-          minLength: 1
-          example: content
-    ExceptionDto:
-      description: 'Ответ, содержащий ошибку'
-      type: object
-      required:
-        - message
+## 🔑 Основные эндпоинты API
+
+### 1. Регистрация пользователя
+**POST** `/api/auth/sign-up`  
+Тело запроса:
+```json
+{
+  "email": "test@test.com",
+  "password": "123456",
+  "nickname": "tester"
+}
+```
+Пример ответа (201 Created):
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9..."
+}
+```
+### 2. Вход пользователя
+**POST** /api/auth/sign-in
+Тело запроса:
+```json
+{
+  "email": "test@test.com",
+  "password": "123456"
+}
+```
+Пример ответа:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9..."
+}
+```
+### 3. Получение списка пользователей
+**GET** /api/users
+Требуется авторизация: Bearer <JWT>
+
+Пример ответа:
+```json
+[
+  {
+    "email": "test@test.com",
+    "nickname": "tester"
+  }
+]
+```
+### 4. Создание поста
+**POST** /api/posts
+Требуется авторизация: Bearer <JWT>
+
+Тело запроса:
+```json
+{
+  "title": "Мой первый пост",
+  "content": "Этот пост создан через API!"
+}
+```
+Пример ответа (201 Created):
+```json
+{
+  "id": 1,
+  "title": "Мой первый пост",
+  "content": "Этот пост создан через API!"
+}
+```
+### 5. Получение постов пользователя
+**GET** /api/posts
+Требуется авторизация: Bearer <JWT>
+
+Пример ответа:
+```json
+[
+  {
+    "id": 1,
+    "title": "Мой первый пост",
+    "content": "Этот пост создан через API!"
+  }
+]
 ```
 
 ### Подробное описание реализованных мер защиты
