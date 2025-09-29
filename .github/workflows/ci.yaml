@@ -1,19 +1,41 @@
 name: Java CI with Security Scan
+
 on: [ push, pull_request ]
 
 jobs:
-  spotbugs:
+  build-and-scan:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
-      - name: Compile code
-        run: mvn package
+        uses: actions/checkout@v4
+
       - name: Set up JDK 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Run spotbugs
+      - name: Build project
+        run: mvn package -DskipTests
+
+      # ---------- SAST ----------
+      - name: Run SpotBugs (SAST)
         run: mvn spotbugs:check
+
+      # ---------- SCA ----------
+      - name: Run OWASP Dependency-Check (SCA)
+        run: mvn org.owasp:dependency-check-maven:check -Dformat=ALL
+
+      # ---------- Сохранение отчётов ----------
+      - name: Upload dependency-check report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: target/dependency-check-report.html
+
+      - name: Upload spotbugs report
+        uses: actions/upload-artifact@v4
+        with:
+          name: spotbugs-report
+          path: target/spotbugsXml.xml
