@@ -39,12 +39,13 @@ jobs:
           path: target/spotbugs.html
 
       - name: Run OWASP Dependency-Check (SCA)
-        run: mvn dependency-check:check -DfailOnError=false
+        run: mvn dependency-check:check 
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-
+          
       - name: Upload Dependency-Check report
         uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
           path: target/dependency-check-report.html
+
