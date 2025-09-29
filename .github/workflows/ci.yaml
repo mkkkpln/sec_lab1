@@ -23,7 +23,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      # ---- SpotBugs (SAST) ----
+      # SpotBugs (SAST)
       - name: Run SpotBugs
         run: mvn spotbugs:spotbugs
 
@@ -31,12 +31,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: spotbugs-report
-          path: |
-            target/spotbugs.html
-            target/spotbugsXml.xml
-          if-no-files-found: warn
+          path: target/spotbugs/spotbugs.html
 
-      # ---- OWASP Dependency-Check (SCA) ----
+      # OWASP Dependency-Check (SCA)
       - name: Run OWASP Dependency-Check
         run: mvn org.owasp:dependency-check-maven:check -DfailOnError=false
         env:
@@ -46,5 +43,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
-          path: target/dependency-check-report.*
-          if-no-files-found: warn
+          path: target/dependency-check-report.html
