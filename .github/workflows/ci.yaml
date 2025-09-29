@@ -1,0 +1,19 @@
+name: Java CI with Security Scan
+on: [ push, pull_request ]
+
+jobs:
+  spotbugs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      - name: Compile code
+        run: mvn package
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Run spotbugs
+        run: mvn spotbugs:check
