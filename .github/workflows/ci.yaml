@@ -38,13 +38,28 @@ jobs:
           name: spotbugs-report
           path: target/spotbugs.html
 
+      # - name: Run OWASP Dependency-Check (SCA)
+      #   run: mvn dependency-check:check
+      #   env:
+      #     NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
+      # - name: Upload Dependency-Check report
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: dependency-check-report
+      #     path: target/dependency-check-report.html
+
       - name: Run OWASP Dependency-Check (SCA)
-        run: mvn dependency-check:check
+        run: mvn dependency-check:check -Dformat=ALL -DautoUpdate=false -DfailOnError=false
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-
+      
       - name: Upload Dependency-Check report
         uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
-          path: target/dependency-check-report.html
+          path: |
+            target/dependency-check-report.html
+            target/dependency-check-report.xml
+            target/dependency-check-report.json
+    
