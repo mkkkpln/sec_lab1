@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: spotbugs-report
-          path: target/spotbugs/spotbugs.html
+          path: target/spotbugs/spotbugsXml.xml
 
       # OWASP Dependency-Check (SCA)
       - name: Run OWASP Dependency-Check
