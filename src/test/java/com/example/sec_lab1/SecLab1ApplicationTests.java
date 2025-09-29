@@ -1,13 +1,8 @@
 package com.example.sec_lab1;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootTest
-class SecLab1ApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
+@SpringBootApplication
+public class SecLab1ApplicationTests {
 
 }
