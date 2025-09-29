@@ -23,24 +23,37 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      # SpotBugs (SAST)
+      # ---- SpotBugs (SAST) ----
       - name: Run SpotBugs
         run: mvn spotbugs:spotbugs
+
+      - name: Prepare SpotBugs artifacts
+        run: |
+          mkdir -p artifacts/spotbugs
+          # скопировать всё, что SpotBugs нагенерил
+          cp -r target/spotbugs/* artifacts/spotbugs/ || true
+          ls -R artifacts/spotbugs || true
 
       - name: Upload SpotBugs report
         uses: actions/upload-artifact@v4
         with:
           name: spotbugs-report
-          path: target/spotbugs/spotbugs.html
+          path: artifacts/spotbugs/
 
-      # OWASP Dependency-Check (SCA)
+      # ---- OWASP Dependency-Check (SCA) ----
       - name: Run OWASP Dependency-Check
         run: mvn org.owasp:dependency-check-maven:check -DfailOnError=false
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
 
+      - name: Prepare OWASP artifacts
+        run: |
+          mkdir -p artifacts/owasp
+          cp target/dependency-check-report.* artifacts/owasp/ || true
+          ls -R artifacts/owasp || true
+
       - name: Upload OWASP report
         uses: actions/upload-artifact@v4
         with:
           name: dependency-check-report
-          path: target/dependency-check-report.html
+          path: artifacts/owasp/
