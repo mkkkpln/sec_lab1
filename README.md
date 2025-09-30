@@ -194,6 +194,12 @@ security:
 
 ### Скриншоты CI/CD
 
-<img width="1462" height="563" alt="image" src="https://github.com/user-attachments/assets/579fecc0-cc93-4a44-a839-240607122582" />
-<img width="1462" height="798" alt="image" src="https://github.com/user-attachments/assets/eaa352f1-d309-4baa-8a72-83919956e43b" />
+<img width="1468" height="780" alt="image" src="https://github.com/user-attachments/assets/83fcfe97-24a4-48f3-b52b-04c046bdbd85" />
+
+<img width="1006" height="637" alt="image" src="https://github.com/user-attachments/assets/7c7de1f8-7c12-463c-ac75-ad8bd52be394" />
+
+<img width="1468" height="790" alt="image" src="https://github.com/user-attachments/assets/64a178d2-db55-41ea-9596-651df3e9ec5f" />
+
+
+
 
